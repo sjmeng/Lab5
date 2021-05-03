@@ -79,11 +79,10 @@ clear.addEventListener('click',() =>{
 
 });
 
-let synth = window.speechSynthesis;
 var voices = [];
 
 function populateVoiceList(){
-voices = synth.getVoices();
+voices = speechSynthesis.getVoices();
 
   for (let i = 0; i < voices.length ; i++) {
     var option = document.createElement('option');
@@ -98,14 +97,12 @@ voices = synth.getVoices();
     voice_selection.appendChild(option);
   }
 }
-if (speechSynthesis.onvoiceschanged !== undefined) {
+populateVoiceList();
+if (typeof speechSynthesis !== 'undefined' && speechSynthesis.onvoiceschanged !== undefined) {
   speechSynthesis.onvoiceschanged = populateVoiceList;
 }
 
-populateVoiceList();
-console.log(voices[0]);
 readText.addEventListener('click',() => {
-  populateVoiceList();
   let readTop = new SpeechSynthesisUtterance(textTop.value);
   let readBottom = new SpeechSynthesisUtterance(textBottom.value);
   let selection = voice_selection.selectedOptions[0].getAttribute('data-name');
