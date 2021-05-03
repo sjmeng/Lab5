@@ -85,7 +85,7 @@ let vol = synth.volume;
 vol = 2;
 
 
-function populateVoiceList() {
+
   voices = synth.getVoices();
 
   for(let i = 0; i < voices.length ; i++) {
@@ -100,12 +100,10 @@ function populateVoiceList() {
     option.setAttribute('data-name', voices[i].name);
     voiceSelect.appendChild(option);
   }
-}
 
 
 
 readText.addEventListener('click',() => {
-  populateVoiceList();
   let readTop = new SpeechSynthesisUtterance(textTop);
   let readBottom = new SpeechSynthesisUtterance(textBottom);
   let selection = voice_selection.selectedOptions[0].getAttribute('data-name');
