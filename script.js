@@ -80,15 +80,16 @@ clear.addEventListener('click',() =>{
 });
 
 let synth = window.speechSynthesis;
+var voices = [];
 
 function populateVoiceList(){
 voices = synth.getVoices();
 
-  for(let i = 0; i < voices.length ; i++) {
+  for (let i = 0; i < voices.length ; i++) {
     var option = document.createElement('option');
     option.textContent = voices[i].name + ' (' + voices[i].lang + ')';
 
-    if(voices[i].default) {
+    if (voices[i].default) {
       option.textContent += ' -- DEFAULT';
     }
 
@@ -97,15 +98,12 @@ voices = synth.getVoices();
     voice_selection.appendChild(option);
   }
 }
-
-
-
-readText.addEventListener('click',() => {
-populateVoiceList();
 if (speechSynthesis.onvoiceschanged !== undefined) {
   speechSynthesis.onvoiceschanged = populateVoiceList;
 }
 
+
+readText.addEventListener('click',() => {
   let readTop = new SpeechSynthesisUtterance(textTop.value);
   let readBottom = new SpeechSynthesisUtterance(textBottom.value);
   let selection = voice_selection.selectedOptions[0].getAttribute('data-name');
@@ -115,6 +113,8 @@ if (speechSynthesis.onvoiceschanged !== undefined) {
       readBottom.voice = voices[i];
     }
   }
+  readTop.volume = range.value/100;
+  readBottom.volume = range.value/100;
   synth.speak(readTop);
   synth.speak(readBottom);
 
@@ -124,21 +124,12 @@ if (speechSynthesis.onvoiceschanged !== undefined) {
 
 volume_group.addEventListener('input',() => {
   if (range.value <= 1){
-    readTop.volume = 0;
-    readBottom.volume = 0;
     volIcon.src = "icons/volume-level-0.svg";
-
   } else if (range.value <= 33) {
-    readTop.volume = 2;
-    readBottom.volume = 2;
     volIcon.src = "icons/volume-level-1.svg";
   } else if (range.value <= 66){
-    readTop.volume = 4;
-    readBottom.volume = 4;
     volIcon.src = "icons/volume-level-2.svg";
   } else{
-    readTop.volume = 6;
-    readBottom.volume = 6;
     volIcon.src = "icons/volume-level-3.svg";
   }
 
