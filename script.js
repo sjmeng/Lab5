@@ -102,8 +102,10 @@ if (speechSynthesis.onvoiceschanged !== undefined) {
   speechSynthesis.onvoiceschanged = populateVoiceList;
 }
 
-
+populateVoiceList();
+console.log(voices[0]);
 readText.addEventListener('click',() => {
+  populateVoiceList();
   let readTop = new SpeechSynthesisUtterance(textTop.value);
   let readBottom = new SpeechSynthesisUtterance(textBottom.value);
   let selection = voice_selection.selectedOptions[0].getAttribute('data-name');
