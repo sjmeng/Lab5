@@ -80,13 +80,7 @@ clear.addEventListener('click',() =>{
 });
 
 let synth = window.speechSynthesis;
-var voices = [];
-let vol = synth.volume;
-vol = 2;
-
-
-
-  voices = synth.getVoices();
+voices = synth.getVoices();
 
   for(let i = 0; i < voices.length ; i++) {
     var option = document.createElement('option');
@@ -122,17 +116,17 @@ readText.addEventListener('click',() => {
 
 volume_group.addEventListener('input',() => {
   if (range.value <= 1){
-    vol = 0;
+    synth.volume = 0;
     volIcon.src = "icons/volume-level-0.svg";
 
   } else if (range.value <= 33) {
-    vol = 2;
+    synth.volume = 2;
     volIcon.src = "icons/volume-level-1.svg";
   } else if (range.value <= 66){
-    vol = 4;
+    synth.volume = 4;
     volIcon.src = "icons/volume-level-2.svg";
   } else{
-    vol = 6;
+    synth.volume = 6;
     volIcon.src = "icons/volume-level-3.svg";
   }
 
