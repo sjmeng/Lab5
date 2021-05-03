@@ -21,7 +21,28 @@ let volume_group = document.getElementById("volume-group");
 let range = document.querySelector("[type='range']");
 let volIcon = document.querySelector("img");
 
+var synth = window.speechSynthesis;
 
+function populateVoiceList(){
+var voices = synth.getVoices();
+
+  for (let i = 0; i < voices.length ; i++) {
+    var option = document.createElement('option');
+    option.textContent = voices[i].name + ' (' + voices[i].lang + ')';
+
+    if (voices[i].default) {
+      option.textContent += ' -- DEFAULT';
+    }
+
+    option.setAttribute('data-lang', voices[i].lang);
+    option.setAttribute('data-name', voices[i].name);
+    voice_selection.appendChild(option);
+  }
+}
+populateVoiceList();
+if (typeof speechSynthesis !== 'undefined' && speechSynthesis.onvoiceschanged !== undefined) {
+  speechSynthesis.onvoiceschanged = populateVoiceList;
+}
 
 
 
@@ -79,28 +100,6 @@ clear.addEventListener('click',() =>{
 
 });
 
-var voices = [];
-
-function populateVoiceList(){
-voices = speechSynthesis.getVoices();
-
-  for (let i = 0; i < voices.length ; i++) {
-    var option = document.createElement('option');
-    option.textContent = voices[i].name + ' (' + voices[i].lang + ')';
-
-    if (voices[i].default) {
-      option.textContent += ' -- DEFAULT';
-    }
-
-    option.setAttribute('data-lang', voices[i].lang);
-    option.setAttribute('data-name', voices[i].name);
-    voice_selection.appendChild(option);
-  }
-}
-populateVoiceList();
-if (typeof speechSynthesis !== 'undefined' && speechSynthesis.onvoiceschanged !== undefined) {
-  speechSynthesis.onvoiceschanged = populateVoiceList;
-}
 
 readText.addEventListener('click',() => {
   let readTop = new SpeechSynthesisUtterance(textTop.value);
