@@ -60,7 +60,7 @@ form.addEventListener('submit',(event) => {
   context.textAlign = 'center';
 
   context.strokeText(textTop.value, canvas.width/2,30);
-  context.strokeText(textBottom.value, canvas.width/2,canvasHeight - 30);
+  context.strokeText(textBottom.value, canvas.width/2, 60);
 
   generate.disabled = true;
   clear.disabled = false;
@@ -138,7 +138,7 @@ volume_group.addEventListener('input',() => {
     volIcon.src = "icons/volume-level-3.svg";
   }
 
-})
+});
 
 
 
