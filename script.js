@@ -19,7 +19,7 @@ let voice_selection = document.getElementById("voice-selection");
 voice_selection.disabled = false;
 let volume_group = document.getElementById("volume-group");
 let range = document.querySelector("[type='range']");
-let volIcon = document.querySelector(".img");
+let volIcon = document.querySelector("img");
 
 
 
@@ -60,7 +60,7 @@ form.addEventListener('submit',(event) => {
   context.textAlign = 'center';
 
   context.fillText(textTop.value, canvas.width/2,30);
-  context.fillText(textBottom.value, canvas.width/2, canvas.height - 60);
+  context.fillText(textBottom.value, canvas.width/2, canvas.height - 50);
 
   generate.disabled = true;
   clear.disabled = false;
@@ -98,14 +98,14 @@ vol = 2;
 
     option.setAttribute('data-lang', voices[i].lang);
     option.setAttribute('data-name', voices[i].name);
-    voiceSelect.appendChild(option);
+    voice_selection.appendChild(option);
   }
 
 
 
 readText.addEventListener('click',() => {
-  let readTop = new SpeechSynthesisUtterance(textTop);
-  let readBottom = new SpeechSynthesisUtterance(textBottom);
+  let readTop = new SpeechSynthesisUtterance(textTop.value);
+  let readBottom = new SpeechSynthesisUtterance(textBottom.value);
   let selection = voice_selection.selectedOptions[0].getAttribute('data-name');
   for (let i = 0; i < voices.length; i++){
     if (voices[i].name == selection){
