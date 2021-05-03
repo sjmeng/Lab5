@@ -59,8 +59,8 @@ form.addEventListener('submit',(event) => {
   context.fillStyle = 'white';
   context.textAlign = 'center';
 
-  context.strokeText(textTop.value, canvas.width/2,30);
-  context.strokeText(textBottom.value, canvas.width/2, 60);
+  context.fillText(textTop.value, canvas.width/2,30);
+  context.fillText(textBottom.value, canvas.width/2, canvas.height - 60);
 
   generate.disabled = true;
   clear.disabled = false;
