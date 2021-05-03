@@ -2,15 +2,147 @@
 
 const img = new Image(); // used to load image from <input> and draw to canvas
 
+const canvas = document.getElementById("user-image");
+const context = canvas.getContext("2d");
+
+let image_input = document.getElementById("image-input");
+let textTop = document.getElementById("text-top");
+let textBottom = document.getElementById("text-bottom");
+
+let generate = document.querySelector("[type='submit']");
+let clear = document.querySelector("[type='reset']");
+let readText = document.querySelector("[type='button']");
+
+let form = document.getElementById("generate-meme");
+
+let voice_selection = document.getElementById("voice-selection");
+voice_selection.disabled = false;
+let volume_group = document.getElementById("volume-group");
+let range = document.querySelector("[type='range']");
+let volIcon = document.querySelector(".img");
+
+
+
+
+
 // Fires whenever the img object loads a new image (such as with img.src =)
 img.addEventListener('load', () => {
   // TODO
+context.clearRect(0,0,canvas.width, canvas.height);
 
-  // Some helpful tips:
-  // - Fill the whole Canvas with black first to add borders on non-square images, then draw on top
-  // - Clear the form when a new image is selected
-  // - If you draw the image to canvas here, it will update as soon as a new image is selected
+generate.disabled = false;
+clear.disabled = true;
+readText.disabled = true;
+
+context.fillStyle = 'black';
+context.fillRect(0,0, canvas.width, canvas.height);
+
+
+let dimensions = getDimmensions(canvas.width, canvas.height, img.width, img.height);
+context.drawImage(img, dimensions.startX, dimensions.startY, dimensions.width, dimensions.height);
+
 });
+
+image_input.addEventListener('change',() => {
+  let input = image_input.files[0];
+  img.src = URL.createObjectURL(input);
+  img.alt = input.name;
+
+
+});
+
+
+
+form.addEventListener('submit',(event) => {
+  event.preventDefault();
+  context.font = "25px Arial";
+  context.fillStyle = 'white';
+  context.textAlign = 'center';
+
+  context.strokeText(textTop.value, canvas.width/2,30);
+  context.strokeText(textBottom.value, canvas.width/2,canvasHeight - 30);
+
+  generate.disabled = true;
+  clear.disabled = false;
+  readText.disabled = false;
+
+});
+
+clear.addEventListener('click',() =>{
+  context.clearRect(0,0,canvas.width, canvas.height);
+  textTop.value = "";
+  textBottom.value = "";
+
+  generate.disabled = false;
+  clear.disabled = true;
+  readText.disabled = true;
+
+});
+
+let synth = window.speechSynthesis;
+var voices = [];
+let vol = synth.volume;
+vol = 2;
+
+
+function populateVoiceList() {
+  voices = synth.getVoices();
+
+  for(let i = 0; i < voices.length ; i++) {
+    var option = document.createElement('option');
+    option.textContent = voices[i].name + ' (' + voices[i].lang + ')';
+
+    if(voices[i].default) {
+      option.textContent += ' -- DEFAULT';
+    }
+
+    option.setAttribute('data-lang', voices[i].lang);
+    option.setAttribute('data-name', voices[i].name);
+    voiceSelect.appendChild(option);
+  }
+}
+
+
+
+readText.addEventListener('click',() => {
+  populateVoiceList();
+  let readTop = new SpeechSynthesisUtterance(textTop);
+  let readBottom = new SpeechSynthesisUtterance(textBottom);
+  let selection = voice_selection.selectedOptions[0].getAttribute('data-name');
+  for (let i = 0; i < voices.length; i++){
+    if (voices[i].name == selection){
+      readTop.voice = voices[i];
+      readBottom.voice = voices[i];
+    }
+  }
+  synth.speak(readTop);
+  synth.speak(readBottom);
+
+
+
+});
+
+volume_group.addEventListener('input',() => {
+  if (range.value <= 1){
+    vol = 0;
+    volIcon.src = "icons/volume-level-0.svg";
+
+  } else if (range.value <= 33) {
+    vol = 2;
+    volIcon.src = "icons/volume-level-1.svg";
+  } else if (range.value <= 66){
+    vol = 4;
+    volIcon.src = "icons/volume-level-2.svg";
+  } else{
+    vol = 6;
+    volIcon.src = "icons/volume-level-3.svg";
+  }
+
+})
+
+
+
+
 
 /**
  * Takes in the dimensions of the canvas and the new image, then calculates the new
@@ -51,3 +183,4 @@ function getDimmensions(canvasWidth, canvasHeight, imageWidth, imageHeight) {
 
   return { 'width': width, 'height': height, 'startX': startX, 'startY': startY }
 }
+
