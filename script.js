@@ -80,6 +80,8 @@ clear.addEventListener('click',() =>{
 });
 
 let synth = window.speechSynthesis;
+
+function populateVoiceList(){
 voices = synth.getVoices();
 
   for(let i = 0; i < voices.length ; i++) {
@@ -94,10 +96,16 @@ voices = synth.getVoices();
     option.setAttribute('data-name', voices[i].name);
     voice_selection.appendChild(option);
   }
+}
 
 
 
 readText.addEventListener('click',() => {
+populateVoiceList();
+if (speechSynthesis.onvoiceschanged !== undefined) {
+  speechSynthesis.onvoiceschanged = populateVoiceList;
+}
+
   let readTop = new SpeechSynthesisUtterance(textTop.value);
   let readBottom = new SpeechSynthesisUtterance(textBottom.value);
   let selection = voice_selection.selectedOptions[0].getAttribute('data-name');
@@ -116,17 +124,21 @@ readText.addEventListener('click',() => {
 
 volume_group.addEventListener('input',() => {
   if (range.value <= 1){
-    synth.volume = 0;
+    readTop.volume = 0;
+    readBottom.volume = 0;
     volIcon.src = "icons/volume-level-0.svg";
 
   } else if (range.value <= 33) {
-    synth.volume = 2;
+    readTop.volume = 2;
+    readBottom.volume = 2;
     volIcon.src = "icons/volume-level-1.svg";
   } else if (range.value <= 66){
-    synth.volume = 4;
+    readTop.volume = 4;
+    readBottom.volume = 4;
     volIcon.src = "icons/volume-level-2.svg";
   } else{
-    synth.volume = 6;
+    readTop.volume = 6;
+    readBottom.volume = 6;
     volIcon.src = "icons/volume-level-3.svg";
   }
 
